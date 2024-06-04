@@ -3,6 +3,9 @@ from flask import Flask, request, jsonify
 app = Flask(__name__)
 
 @app.route('/bmi', methods=['POST'])
+@app.route('/')
+def home():
+    return "Welcome to the BMI calculator API"
 def calculate_bmi():
     data = request.get_json()
     if not data or 'height' not in data or 'weight' not in data:
