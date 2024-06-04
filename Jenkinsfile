@@ -25,7 +25,7 @@ pipeline {
         stage('Run Docker Container') {
             steps {
                 script {
-                    docker.image("${env.DOCKER_IMAGE}:latest").run("-p 5000:5000")
+                    docker.image("${env.DOCKER_IMAGE}:latest").run("-p 5000:5000 --name bmi-container")
                 }
             }
         }
