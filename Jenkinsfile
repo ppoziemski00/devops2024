@@ -34,7 +34,7 @@ pipeline {
             steps {
                 script {
                     def response = bat(script: '''
-                        powershell -Command "$response = Invoke-RestMethod -Uri http://localhost:5000/bmi -Method Post -ContentType 'application/json' -Body '{\\"weight\\": 70, \\"height\\": 1.75}'; Write-Output $response.StatusCode"
+                        powershell -Command "$response = Invoke-RestMethod -Uri http://localhost:5000/bmi -Method Post -ContentType 'application/json' -Body '{\\"weight\\": 70, \\"height\\": 1.75}'; $response.StatusCode"
                     ''', returnStdout: true).trim()
                     if (response != '200') {
                         error "Test failed with response code ${response}"
