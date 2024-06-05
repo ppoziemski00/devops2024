@@ -24,7 +24,7 @@
             const weight = document.getElementById('weight').value;
             const height = document.getElementById('height').value;
 
-            fetch('http://localhost:5000/bmi', {
+            fetch('/bmi', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
