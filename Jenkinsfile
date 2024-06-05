@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        REPO = 'https://github.com/adasgda/devops.git'
+        REPO = 'https://github.com/ppoziemski00/devops2024.git'
         BRANCH = 'main'
         DOCKER_IMAGE = 'bmi-image'
     }
@@ -35,7 +35,7 @@ pipeline {
                 script {
                     sleep 10 // Czekaj na uruchomienie kontenera
                     def response = bat(script: '''
-                        powershell -Command "try { $response = Invoke-RestMethod -Uri 'http://localhost:5000/bmi?weight=70&height=1.75' -Method Get; Write-Output $response } catch { Write-Output $_.Exception.Response.StatusCode; Write-Output $_.Exception.Response.StatusDescription; $stream = New-Object IO.StreamReader($_.Exception.Response.GetResponseStream()); $errorResponse = $stream.ReadToEnd(); Write-Output $errorResponse }"
+                        powershell -Command "try { $response = Invoke-WebRequest -Uri 'http://localhost:5000/bmi?weight=70&height=1.75' -Method Get; Write-Output $response.Content } catch { Write-Output $_.Exception.Response.StatusCode; Write-Output $_.Exception.Response.StatusDescription; $stream = New-Object IO.StreamReader($_.Exception.Response.GetResponseStream()); $errorResponse = $stream.ReadToEnd(); Write-Output $errorResponse }"
                     ''', returnStdout: true).trim()
                     echo "Response: ${response}"
                     if (!response.contains('bmi')) {
