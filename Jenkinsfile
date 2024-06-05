@@ -35,7 +35,7 @@ pipeline {
                 script {
                     sleep 10 // Czekaj na uruchomienie kontenera
                     def response = bat(script: '''
-                        powershell -Command "$headers = @{ 'Content-Type' = 'application/json' }; $body = '{\\"weight\\": 70, \\"height\\": 1.75}'; try { $response = Invoke-RestMethod -Uri 'http://localhost:5000/bmi' -Method Post -Headers $headers -Body $body; Write-Output $response } catch { Write-Output $_.Exception.Response.StatusCode; Write-Output $_.Exception.Response.StatusDescription; $stream = New-Object IO.StreamReader($_.Exception.Response.GetResponseStream()); $errorResponse = $stream.ReadToEnd(); Write-Output $errorResponse }"
+                        powershell -Command "$headers = @{ 'Content-Type' = 'application/json' }; $body = '{\\"weight\\": 70, \\"height\\": 1.75}'; try { $response = Invoke-RestMethod -Uri 'http://localhost:5000/bmi' -Method Post -Headers $headers -Body $body; Write-Output $response } catch { $errorMsg = $_.Exception.Message; Write-Output 'Error Message:' $errorMsg; if ($_.Exception.Response -ne $null) { $statusCode = $_.Exception.Response.StatusCode.value__; $statusDescription = $_.Exception.Response.StatusDescription; Write-Output 'Status Code:' $statusCode; Write-Output 'Status Description:' $statusDescription; $stream = [System.IO.StreamReader]::new($_.Exception.Response.GetResponseStream()); $errorResponse = $stream.ReadToEnd(); Write-Output $errorResponse; } else { Write-Output 'No response from server'; } }"
                     ''', returnStdout: true).trim()
                     echo "Response: ${response}"
                     if (!response.contains('bmi')) {
