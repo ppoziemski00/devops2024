@@ -2,14 +2,15 @@ from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 
-@app.route('/bmi', methods=['GET'])
+@app.route('/bmi', methods=['POST'])
 def calculate_bmi():
-    weight = request.args.get('weight', type=float)
-    height = request.args.get('height', type=float)
-    if weight is None or height is None:
+    data = request.get_json()
+    if not data or 'height' not in data or 'weight' not in data:
         return jsonify(error="Invalid input"), 400
     
     try:
+        height = float(data['height'])
+        weight = float(data['weight'])
         bmi = weight / (height ** 2)
         return jsonify(bmi=bmi)
     except (ValueError, TypeError):
