@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BMI Calculator</title>
+</head>
+<body>
+    <h1>BMI Calculator</h1>
+    <form id="bmiForm">
+        <label for="weight">Weight (kg):</label>
+        <input type="text" id="weight" name="weight" required>
+        <br>
+        <label for="height">Height (m):</label>
+        <input type="text" id="height" name="height" required>
+        <br>
+        <button type="button" onclick="submitForm()">Calculate BMI</button>
+    </form>
+    <h2>Result</h2>
+    <pre id="result"></pre>
+
+    <script>
+        function submitForm() {
+            const weight = document.getElementById('weight').value;
+            const height = document.getElementById('height').value;
+
+            fetch('http://localhost:5000/bmi', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    weight: parseFloat(weight),
+                    height: parseFloat(height)
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('result').innerText = JSON.stringify(data, null, 2);
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
+</body>
+</html>
