@@ -21,7 +21,6 @@ def calculate_bmi():
         height = float(data['height'])
         weight = float(data['weight'])
         bmi = weight / (height ** 2)
-        bmi = round(bmi,1)
         return jsonify(bmi=bmi)
     except (ValueError, TypeError):
         return jsonify(error="Invalid data type"), 400
