@@ -62,10 +62,10 @@
 <body>
     <h1>BMI Calculator</h1>
     <form id="bmiForm">
-        <label for="weight">Weight (kg):</label>
+        <label for="weight">WAGA (kg):</label>
         <input type="text" id="weight" name="weight" required>
         <br>
-        <label for="height">Height (m):</label>
+        <label for="height">WZROST (cm):</label>
         <input type="text" id="height" name="height" required>
         <br>
         <button type="button" onclick="submitForm()">Calculate BMI</button>
@@ -109,7 +109,7 @@
                 } else {
                     const bmi = parseFloat(data.bmi).toFixed(1);
                     const category = getBMICategory(bmi);
-                    document.getElementById('result').innerText = `BMI: ${bmi}\nCategory: ${category}`;
+                    document.getElementById('result').innerText = `BMI: ${bmi}\nKategoria: ${category}`;
                 }
             })
             .catch(error => console.error('Error:', error));
