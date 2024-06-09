@@ -4,61 +4,61 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BMI Calculator</title>
-</head>
     <style>
-      body {
-          font-family: Arial, sans-serif;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          height: 100vh;
-          margin: 0;
-          background-color: #f0f8ff;
-      }
-      h1 {
-          color: #333;
-      }
-      form {
-          display: flex;
-          flex-direction: column;
-          width: 300px;
-          padding: 20px;
-          border-radius: 10px;
-          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-          background-color: #ffffff;
-      }
-      label {
-          margin: 10px 0 5px;
-          font-weight: bold;
-      }
-      input {
-          padding: 10px;
-          border: 1px solid #ccc;
-          border-radius: 5px;
-          font-size: 16px;
-      }
-      button {
-          padding: 10px;
-          margin-top: 20px;
-          background-color: #007BFF;
-          color: white;
-          border: none;
-          border-radius: 5px;
-          cursor: pointer;
-          font-size: 16px;
-      }
-      button:hover {
-          background-color: #0056b3;
-      }
-      .result {
-          margin-top: 20px;
-      }
-      .result p {
-          font-size: 18px;
-          color: #333;
-      }
-  </style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f8ff;
+        }
+        h1 {
+            color: #333;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            width: 300px;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: #ffffff;
+        }
+        label {
+            margin: 10px 0 5px;
+            font-weight: bold;
+        }
+        input {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button {
+            padding: 10px;
+            margin-top: 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .result {
+            margin-top: 20px;
+        }
+        .result p {
+            font-size: 18px;
+            color: #333;
+        }
+    </style>
+</head>
 <body>
     <h1>BMI Calculator</h1>
     <form id="bmiForm">
@@ -74,23 +74,43 @@
     <pre id="result"></pre>
 
     <script>
+        function getBMICategory(bmi) {
+            if (bmi < 18.5) {
+                return "Niedowaga";
+            } else if (bmi >= 18.5 && bmi < 24.9) {
+                return "Prawidłowa waga";
+            } else if (bmi >= 25 && bmi < 29.9) {
+                return "Nadwaga";
+            } else {
+                return "Otyłość";
+            }
+        }
+
         function submitForm() {
-            const weight = document.getElementById('weight').value;
-            const height = document.getElementById('height').value;
+            const weight = parseFloat(document.getElementById('weight').value);
+            const height = parseFloat(document.getElementById('height').value);
+
+            if (isNaN(weight) || isNaN(height)) {
+                document.getElementById('result').innerText = "Invalid input. Please enter valid numbers.";
+                return;
+            }
 
             fetch('/bmi', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({
-                    weight: parseFloat(weight),
-                    height: parseFloat(height)
-                })
+                body: JSON.stringify({ weight, height })
             })
             .then(response => response.json())
             .then(data => {
-                document.getElementById('result').innerText = JSON.stringify(data, null, 2);
+                if (data.error) {
+                    document.getElementById('result').innerText = data.error;
+                } else {
+                    const bmi = parseFloat(data.bmi).toFixed(1);
+                    const category = getBMICategory(bmi);
+                    document.getElementById('result').innerText = `BMI: ${bmi}\nCategory: ${category}`;
+                }
             })
             .catch(error => console.error('Error:', error));
         }
