@@ -18,7 +18,7 @@ def calculate_bmi():
         return jsonify(error="Invalid input"), 400
     
     try:
-        height = float(data['height'])
+        height = float(data['height']) / 100
         weight = float(data['weight'])
         bmi = weight / (height ** 2)
         return jsonify(bmi=bmi)
